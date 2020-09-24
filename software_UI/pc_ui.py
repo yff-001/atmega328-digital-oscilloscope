@@ -1,17 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[5]:
-
-
-# works with adc_serial_write_3.ino
+# works with adc_reading.ino
 
 import serial, pygame, os, sys, pygame.gfxdraw
 import tkinter as tk
 from tkinter import ttk
 
 root = tk.Tk()
-root.title("ATmega328 ADC")
+root.title("ATmega328 DSO")
 
 # frame for pygame
 wave_frame =tk.Frame(master=root, width=1000, height=500)

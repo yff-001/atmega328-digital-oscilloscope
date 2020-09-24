@@ -1,8 +1,25 @@
 # A Digital Oscilloscope Based On ATmega328
 
-ATmega328 chip has a rather powerful analog to digital converter. It's a 10 bit resolution successive approximation ADC. Input voltage range is 0 - Vcc. 
+There will be a time in an electrical engineer's life when he decides to build his own instruments. Many attempts have been made to build a simple oscilloscope around an Arduino. My project is built upon these similar projects.
 
-For this project, I picked Arduino Nano as the main part of the system. The front end is designed around a LM324 op-amp. Power is supplied by a 9V adapter. It powers the Arduino Nano and LM324. 
+## Hardware
+ATmega328 chip has a rather powerful analog to digital converter. For this project, I picked Arduino Nano as the main part of the system.
+### ADC
+It's a 10 bit resolution successive approximation ADC. Input voltage range is 0 - Vcc. 
+
+### Front-end
+The front end is designed around a LM324 op-amp. Power is supplied by a 9V adapter. It powers the Arduino Nano and LM324.
+### Acquisition
+After the voltage of a signal is measured by ADC, this 8 bit integer is stored in a 1000 byte circular buffer. When the oscilloscope is triggered, ADC will sample another 500 bytes, thus the circular buffer will contain information before and after the trigger event.
+
+### Didplay
+ATmega328 simply doesn't have the processing power or memeory to acquire and display a signal. So information stored in the circular buffer is transmitted to a PC for display. I chose UART as the tranmission method since Arduino Nano already has UART-USB bridge.
+
+## Software
+
+### Arduino
+
+  
 
 In this project, I attempt to run this ADC at its maximum speed. In order to achieve that, there are a few steps to go through. First, ADC is put in free running mode. In this mode, a new conversion starts immediately after the conversion completes. One conversion takes 13 ADC clock cycles.
 
