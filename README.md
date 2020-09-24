@@ -20,6 +20,10 @@ ATmega328 simply doesn't have the processing power or memeory to acquire and dis
 ## Software
 
 ### Arduino
+Software running on Arduino is written using a few functions from Arduino platform, but the code is mostly in accordance with C++ standards. The main function of the code is acquisition and transmission of information to pc.
+
+### User Interface
+Software running on PC is written is Python. UI features are built with Tkinter and Pygame libararies for Python. Tinkter offers many UI features commonly found in Windows interfaces. Pygame is quite robust in animating data on 2D surfaces. Data transmission from MCU is handled by Pyserial.
 
 ## PCB
 
