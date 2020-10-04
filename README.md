@@ -15,7 +15,7 @@ The front end is designed around a LM324 op-amp. Power is supplied by a 9V adapt
 After the voltage of a signal is measured by ADC, this 8 bit integer is stored in a 1000 byte circular buffer. When the oscilloscope is triggered, ADC will sample another 500 bytes, thus the circular buffer will contain information before and after the trigger event.
 
 ### Didplay
-ATmega328 simply doesn't have the processing power or memeory to acquire and display a signal. So information stored in the circular buffer is transmitted to a PC for display. I chose UART as the tranmission method since Arduino Nano already has UART-USB bridge.
+ATmega328 simply doesn't have the processing power or memeory to acquire and display a signal. So information stored in the circular buffer is transmitted to a PC for display.
 
 ## Software
 
@@ -24,6 +24,9 @@ Software running on Arduino is written using a few functions from Arduino platfo
 
 ### User Interface
 Software running on PC is written is Python. UI features are built with Tkinter and Pygame libararies for Python. Tinkter offers many UI features commonly found in Windows interfaces. Pygame is quite robust in animating data on 2D surfaces. Data transmission from MCU is handled by Pyserial.
+
+### Communication Protocol
+I chose UART as the communication protocol between the microcontroller and pc since Arduino Nano already has UART-USB bridge.
 
 ## PCB
 
