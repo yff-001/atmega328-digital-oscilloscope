@@ -30,7 +30,7 @@ I chose UART as the communication protocol between the microcontroller and pc si
 
 ## PCB
 
-PCB and schematic are designed with KiCad.
+PCB and schematic are designed with KiCad. It's 2 layer design. The back side is mostly ground plane.
 
 <p align="center">
   <img src="https://github.com/yff-001/atmega328-digital-oscilloscope/blob/master/images/pcb_top.png" width="1000" title="PCB Top">
@@ -40,7 +40,7 @@ PCB and schematic are designed with KiCad.
   <img src="https://github.com/yff-001/atmega328-digital-oscilloscope/blob/master/images/pcb_bottom.png" width="1000" title="PCB Bottom">
 </p>
 
-Gerber file was sent to a manufacturer in China. And this is what received in the mail a week after.
+PCB were ordered from a popular manufacturer in China. 
 
 <p align="center">
   <img src="https://github.com/yff-001/atmega328-digital-oscilloscope/blob/master/images/IMG_1096.jpg" width="1000" title="PCB Bottom">
