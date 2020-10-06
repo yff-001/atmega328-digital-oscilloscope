@@ -30,7 +30,7 @@ I chose UART as the communication protocol between the microcontroller and pc si
 
 ## PCB
 
-PCB and schematic are designed with KiCad. It's 2 layer design. The back side is mostly ground plane.
+PCB and schematic are designed with KiCad. It's 2 layer design. The back side is mostly ground plane. Other than Arduino Nano and LM324, most components on this PCB are surfaced mounted.
 
 <p align="center">
   <img src="https://github.com/yff-001/atmega328-digital-oscilloscope/blob/master/images/pcb_top.png" width="1000" title="PCB Top">
