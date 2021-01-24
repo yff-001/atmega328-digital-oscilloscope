@@ -14,7 +14,7 @@ The front end is designed around a LM324 op-amp. Power is supplied by a 9V adapt
 ### Acquisition
 After the voltage of a signal is measured by ADC, this 8 bit integer is stored in a 1000 byte circular buffer. When the oscilloscope is triggered, ADC will sample another 500 bytes, thus the circular buffer will contain information before and after the trigger event.
 
-### Didplay
+### Display
 ATmega328 simply doesn't have the processing power or memeory to acquire and display a signal. So information stored in the circular buffer is transmitted to a PC for display.
 
 ## Software
