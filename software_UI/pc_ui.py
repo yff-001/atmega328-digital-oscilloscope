@@ -1,93 +1,78 @@
-# works with adc_reading.ino
+import sys, time
+import numpy as np
+import pygame as pg
+import OpenGL.GL as gl
+from OpenGL.GL import shaders
 
-import serial, pygame, os, sys, pygame.gfxdraw
-import tkinter as tk
-from tkinter import ttk
+vertex_code = """
+#version 460
+layout(location=0) in vec4 position;
+void main() {
+    gl_Position = position;
+}
+"""
 
-root = tk.Tk()
-root.title("ATmega328 DSO")
-
-# frame for pygame
-wave_frame =tk.Frame(master=root, width=1000, height=500)
-wave_frame.grid(row=0, column=0, rowspan=4, padx=0, pady=0)
-# embed pygame display 
-os.environ['SDL_WINDOWID'] = str(wave_frame.winfo_id())
-
-# set up serial
-ser = serial.Serial('com3', 115200)
-
-# set up pygame
-main_clock = pygame.time.Clock()
-pygame.init()
-width, height = 1000, 500
-s = pygame.display.set_mode((width, height))
-r,g,b = 0,0,0
-s.fill((240,240,240))
-
-# event handlers
-def set_prescaler():
-    prescaler_value = prescaler.get()
-    # put int value in a list first, pass it to bytes(), then pass it to ser.write()
-    v = int(prescaler_value)
-    ser.write(bytes([v]))
-        
-def set_run_stop():
-    ser.write(bytes([170]))
-
-# trigger setting:
-side_frame0 = tk.LabelFrame(master=root, text=" Trigger Setting")
-side_frame0.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
-label = tk.Label(master=side_frame0, text="")
-label.pack()
-
-# horizontal control:
-side_frame1 = tk.LabelFrame(master=root, text="Horizontal Control")
-side_frame1.grid(row=1, column=1, padx=5, pady=5, sticky="nsew")
-# prescaler--
-prescaler = ttk.Combobox(master=side_frame1, values=[2,4,8,16,32,64,128])
-prescaler.current(6)    # current() method controls defualt item shown in list
-prescaler.pack()
-
-# vertical control:
-side_frame2 = tk.LabelFrame(master=root, text="Vertical Control")
-side_frame2.grid(row=2, column=1, padx=5, pady=5, sticky="nsew")
-label = tk.Label(master=side_frame2, text="")
-label.pack()
-
-# run/stop button
-run_stop_button = tk.Button(master=root, text='Run/Stop', command=set_run_stop)
-run_stop_button.grid(row=3, column=1, padx=5, pady=5, sticky='nsew')
-
-button1 = tk.Button(master=side_frame1, text='Set', command=set_prescaler)
-#sticky in e&w directions extends button to occupy entire grid cell
-button1.pack(fill=tk.X)
-
-#button2 = tk.Button(master=root, text='Stop', command=stop_wave)
-#button2.grid(row=1, column=1, padx=5, pady=5, sticky='ew')
+frag_code = """
+#version 460
+layout(location=0) out vec4 color;
+uniform vec4 u_color;
+void main() {
+    color = u_color;
+}
+"""
 
 def main():
+    # create opengl context with pygame
+    pg.init()
+    clock = pg.time.Clock()
+    size = (1000, 500)
+    pg.display.set_mode(size, pg.OPENGL | pg.DOUBLEBUF, vsync=1)
+    pg.display.set_caption("Waveform Display")
+    #print(gl.glGetString(gl.GL_VERSION))
+
+    vertex_shader = shaders.compileShader(vertex_code, gl.GL_VERTEX_SHADER)
+    frag_shader = shaders.compileShader(frag_code, gl.GL_FRAGMENT_SHADER)
+    shader = shaders.compileProgram(vertex_shader, frag_shader)
+
+    # bind shader
+    gl.glUseProgram(shader)
+    # retrieve location of "u_color"
+    location = gl.glGetUniformLocation(shader, "u_color")
+    gl.glUniform4f(location, 0.890, 0.149, 0.752, 1.0)
+
     try:
         while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
+            clock.tick()
+            # white backgroud
+            gl.glClearColor(1.0, 1.0, 1.0, 1.0)
+            gl.glClear(gl.GL_COLOR_BUFFER_BIT)
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
                     sys.exit()
 
-            s.fill((240,240,240))
+            scale, PI = 2, np.pi
+            x = np.linspace(-1,1,1000).astype('float32')
+            # random noise
+            noise = 0.01 * np.random.uniform(-1,1,1000).astype('float32')
+            # sine wave + noise(optional)
+            y = (1.0/scale) * np.sin(6 * PI * x) #+ noise
+            trace = np.vstack((x,y)).T
 
-            if ser.in_waiting > 0:
-                # x is a series of bytes, turns out to be iterable
-                x = ser.read(1000)
-                # maybe I need threading to seperate data handling and rendering
-                for i,j in enumerate(x):
-                    # waveform display occupies 256 pixels
-                    pygame.gfxdraw.pixel(s, i, 376-j, (128,0,255))
+            vbo = gl.glGenBuffers(1)
+            gl.glBindBuffer(gl.GL_ARRAY_BUFFER, vbo)
+            gl.glBufferData(gl.GL_ARRAY_BUFFER, trace, gl.GL_STATIC_DRAW)
 
-            pygame.display.update()
-            root.update()
-    except:
-        ser.close()
-        pygame.quit()
+            gl.glEnableVertexAttribArray(0)
+            gl.glVertexAttribPointer(0, 2, gl.GL_FLOAT, gl.GL_FALSE, 0, None)
+
+            gl.glDrawArrays(gl.GL_LINE_STRIP, 0 ,1000)
+            #pg.display.set_caption("FPS: {}".format(clock.get_fps()))
+            pg.display.flip()
+
+    except Exception as e:
+        print(e)
 
 if __name__ == "__main__":
     main()
