@@ -25,7 +25,7 @@ Software running on Arduino is written using a few functions from Arduino platfo
 ### User Interface
 Software running on PC is written in Python. Waveform display is handled by OpenGL, hence it is very fast. Pygame provides the the window handling. PyOpenGL is the underlying Python binding to OpenGL functionality. Data transmission from MCU is handled by Pyserial.
 
-A test sine wave.
+<em>A test sine wave.</em>
 
 <p align="center">
   <img src="https://github.com/yff-001/atmega328-digital-oscilloscope/blob/master/images/test_sine.png" width="1000" title="PCB Bottom">
