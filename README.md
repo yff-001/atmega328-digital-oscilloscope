@@ -23,7 +23,7 @@ ATmega328 simply doesn't have the processing power or memeory to acquire and dis
 Software running on Arduino is written using a few functions from Arduino platform, but the code is mostly in accordance with C++ standards. The main function of the code is acquisition and transmission of information to pc.
 
 ### User Interface
-Software running on PC is written in Python. Waveform display is handled by OpenGL, hence the it is very fast. Pygame provides the the window handling. PyOpenGL is the underlying Python binding to OpenGL functionality. Data transmission from MCU is handled by Pyserial.
+Software running on PC is written in Python. Waveform display is handled by OpenGL, hence it is very fast. Pygame provides the the window handling. PyOpenGL is the underlying Python binding to OpenGL functionality. Data transmission from MCU is handled by Pyserial.
 
 A test sine wave.
 
